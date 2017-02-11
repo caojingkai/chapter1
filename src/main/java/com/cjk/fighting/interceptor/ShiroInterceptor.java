@@ -23,7 +23,7 @@ public class   ShiroInterceptor {
 	public void pointCut() {
 	}
 	
-	//Around("pointCut()")
+	// Around("pointCut()")
 	public Object showParameter(ProceedingJoinPoint pjp)
 	{
 		System.out.println("ShiroInterceptor::@Around");
