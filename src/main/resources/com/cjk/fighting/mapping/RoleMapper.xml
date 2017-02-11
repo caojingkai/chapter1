@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjk.fighting.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.cjk.fighting.model.Role" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+    <collection column="ROLE_NAME" property="permissionList" resultMap="permissionList"></collection>
+  </resultMap>
+  
+   <resultMap id="permissionList" type="com.cjk.fighting.model.Permission" >
+    <id column="PERMISSIONID" property="id" jdbcType="DECIMAL" />
+    <result column="PERMISSION_NAME" property="permissionName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ID, ROLE_NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ROLE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectPermissionByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+   SELECT RO.ID, RO.ROLE_NAME, PE.ID AS PERMISSIONID, PE.PERMISSION_NAME
+      FROM ROLE RO, PERMISSION PE, ROLE_PERMISSION RP
+     WHERE RO.ID = RP.ROLE_ID
+       AND PE.ID = RP.PERMISSION_ID
+       AND RO.ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectRoleByUserID" resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+    SELECT RO.ID,RO.ROLE_NAME 
+    FROM ROLE RO,USER_ROLE UR 
+    WHERE UR.ROLE_ID = RO.ID 
+    AND UR.USER_ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ROLE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cjk.fighting.model.Role" >
+    insert into ROLE (ID, ROLE_NAME)
+    values (#{id,jdbcType=DECIMAL}, #{roleName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjk.fighting.model.Role" >
+    insert into ROLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="roleName != null" >
+        ROLE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjk.fighting.model.Role" >
+    update ROLE
+    <set >
+      <if test="roleName != null" >
+        ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjk.fighting.model.Role" >
+    update ROLE
+    set ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjk.fighting.dao.PostMapper" >
+<cache eviction="FIFO" flushInterval="86400000" size="1000" readOnly="true"/>
+
+  <resultMap id="BaseResultMap" type="com.cjk.fighting.model.Post" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="PUBLISHTIME" property="publishtime" jdbcType="DATE" />
+    <result column="CANSEE" property="cansee" jdbcType="DECIMAL" />
+    <association column="USERID" property="user" javaType="com.cjk.fighting.model.Users">
+      	<id column="USERID" property="userid" jdbcType="DECIMAL" />
+      	<result column="USERNAME" property="username" jdbcType="VARCHAR" />
+ 		<result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    	<result column="GRADE" property="grade" jdbcType="DECIMAL" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, USERID, CONTENT, PUBLISHTIME, CANSEE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from POST
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectForPage"  resultMap="BaseResultMap" parameterType="Map">
+  select 
+    <include refid="Base_Column_List" />
+    from POST
+  </select>
+  
+    <select id="selectByUserIDPage"  resultMap="BaseResultMap" parameterType="Map">
+  select 
+    <include refid="Base_Column_List" />
+    from POST WHERE USERID = #{userId}
+  </select>
+  
+  <select id="selectByUserID" resultMap="BaseResultMap">
+  select t.*,u.* from post t left join USERS u on (t.userid = u.userid) 
+  where  u.userid=${userID} ORDER BY PUBLISHTIME ${orderBy}
+  </select>
+  
+  <select id="selectByUserIDForPage"  resultMap="BaseResultMap">
+ select * from (
+SELECT ID,USERID,CONTENT,PUBLISHTIME,CANSEE,USERNAME,ADDRESS,GRADE,ROWNUM AS ROWW FROM (
+ SELECT T.ID,
+        T.USERID,
+        T.CONTENT,
+        T.PUBLISHTIME,
+        T.CANSEE,
+        U.USERNAME,
+        U.ADDRESS,
+        U.GRADE
+   FROM POST T
+   LEFT JOIN USERS U ON (T.USERID = U.USERID)
+  ORDER BY T.PUBLISHTIME DESC
+  ) SS WHERE ROWNUM <![CDATA[< ]]>= #{endNum}
+  ) where ROWW >=#{beginNum}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from POST
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cjk.fighting.model.Post" >
+    insert into POST (ID, USERID, CONTENT, 
+      PUBLISHTIME, CANSEE)
+    values (#{id,jdbcType=DECIMAL}, #{userid,jdbcType=DECIMAL}, #{content,jdbcType=VARCHAR}, 
+      #{publishtime,jdbcType=DATE}, #{cansee,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjk.fighting.model.Post" >
+    insert into POST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="publishtime != null" >
+        PUBLISHTIME,
+      </if>
+      <if test="cansee != null" >
+        CANSEE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null" >
+        #{publishtime,jdbcType=DATE},
+      </if>
+      <if test="cansee != null" >
+        #{cansee,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjk.fighting.model.Post" >
+    update POST
+    <set >
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null" >
+        PUBLISHTIME = #{publishtime,jdbcType=DATE},
+      </if>
+      <if test="cansee != null" >
+        CANSEE = #{cansee,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjk.fighting.model.Post" >
+    update POST
+    set USERID = #{userid,jdbcType=DECIMAL},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      PUBLISHTIME = #{publishtime,jdbcType=DATE},
+      CANSEE = #{cansee,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

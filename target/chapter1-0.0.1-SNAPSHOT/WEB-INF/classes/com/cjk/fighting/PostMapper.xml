@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjk.fighting.dao.PostMapper" >
+  <resultMap id="BaseResultMap" type="com.cjk.fighting.model.Post" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="USERID" property="userid" jdbcType="DECIMAL" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="PUBLISHTIME" property="publishtime" jdbcType="DATE" />
+    <result column="CANSEE" property="cansee" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, USERID, CONTENT, PUBLISHTIME, CANSEE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from POST
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from POST
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cjk.fighting.model.Post" >
+    insert into POST (ID, USERID, CONTENT, 
+      PUBLISHTIME, CANSEE)
+    values (#{id,jdbcType=DECIMAL}, #{userid,jdbcType=DECIMAL}, #{content,jdbcType=VARCHAR}, 
+      #{publishtime,jdbcType=DATE}, #{cansee,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjk.fighting.model.Post" >
+    insert into POST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="publishtime != null" >
+        PUBLISHTIME,
+      </if>
+      <if test="cansee != null" >
+        CANSEE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null" >
+        #{publishtime,jdbcType=DATE},
+      </if>
+      <if test="cansee != null" >
+        #{cansee,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjk.fighting.model.Post" >
+    update POST
+    <set >
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null" >
+        PUBLISHTIME = #{publishtime,jdbcType=DATE},
+      </if>
+      <if test="cansee != null" >
+        CANSEE = #{cansee,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjk.fighting.model.Post" >
+    update POST
+    set USERID = #{userid,jdbcType=DECIMAL},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      PUBLISHTIME = #{publishtime,jdbcType=DATE},
+      CANSEE = #{cansee,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

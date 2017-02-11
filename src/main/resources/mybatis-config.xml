@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <properties>
+     <property name="dialect" value="Oracle"/>
+  </properties>
+  
+  <settings>
+<setting name="cacheEnabled" value="true"/>
+</settings>
+  
+ <plugins>
+     <plugin interceptor="com.cjk.fighting.interceptor.mybatis.PagePlugin"></plugin>
+  </plugins>
+  
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl"/>
+        <property name="username" value="scott"/>
+        <property name="password" value="cjk6346039"/>
+      </dataSource>
+    </environment>
+  </environments>	
+  
+</configuration>

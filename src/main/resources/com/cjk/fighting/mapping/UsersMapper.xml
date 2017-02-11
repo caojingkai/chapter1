@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjk.fighting.dao.UsersMapper" >
+<cache eviction="FIFO" flushInterval="86400000" size="1000" readOnly="true"/>
+  <resultMap id="BaseResultMap" type="com.cjk.fighting.model.Users" >
+    <id column="USERID" property="userid" jdbcType="DECIMAL" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="GRADE" property="grade" jdbcType="DECIMAL" />
+    <result column="REALNAME" property="realname" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="DECIMAL" />
+    <result column="SEX" property="sex" jdbcType="DECIMAL" />
+    <result column="REGISTERTIME" property="registertime"  />
+    <result column="EMIL" property="emil" jdbcType="VARCHAR" />
+    <result column="HEADIMG" property="headimg" jdbcType="VARCHAR" />
+    <result column="LOGINNAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="IMAGE" property="image" jdbcType="BLOB"/>
+    <result column="USERSALT" property="userSalt" jdbcType="VARCHAR" />
+    <collection property="postList" column="USERID" resultMap="postList"></collection>
+    <collection property="roleList" column="USERID" resultMap="roleList"></collection>
+  </resultMap>
+  
+  <resultMap id="postList" type="com.cjk.fighting.model.Post" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="PUBLISHTIME" property="publishtime" jdbcType="DATE" />
+    <result column="CANSEE" property="cansee" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <resultMap id="roleList" type="com.cjk.fighting.model.Role" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    USERID, USERNAME, ADDRESS, GRADE, REALNAME, PASSWORD, PHONE, SEX, REGISTERTIME, EMIL, 
+    HEADIMG
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from USERS
+    where USERID = #{userid,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectByUserLoginName" resultMap="BaseResultMap" parameterType="String" >
+    select u.*,p.* from USERS u left join POST p on (u.userid = p.userid) where u.loginname =#{loginName}
+  </select>
+  
+  <select id="selectByUserRole" resultMap="BaseResultMap" parameterType="int">
+    SELECT US.USERNAME, US.USERID, RO.ID, RO.ROLE_NAME
+      FROM USERS US, ROLE RO, USER_ROLE UR
+      WHERE UR.USER_ID = US.USERID
+        AND UR.ROLE_ID = RO.ID
+        AND US.USERID = #{userid, jdbcType = DECIMAL}  
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from USERS
+    where USERID = #{userid,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cjk.fighting.model.Users" >
+    insert into USERS (USERID, USERNAME, ADDRESS, 
+      GRADE, REALNAME, PASSWORD, 
+      PHONE, SEX, REGISTERTIME, 
+      EMIL, HEADIMG)
+    values (#{userid,jdbcType=DECIMAL}, #{username,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{grade,jdbcType=DECIMAL}, #{realname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=DECIMAL}, #{sex,jdbcType=DECIMAL}, #{registertime}, 
+      #{emil,jdbcType=VARCHAR}, #{headimg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjk.fighting.model.Users" >
+     <selectKey order="BEFORE" keyProperty="userid" resultType="int">
+       SELECT CHAPTER1_SEQ.NEXTVAL FROM DUAL
+     </selectKey>
+  
+    insert into USERS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="grade != null" >
+        GRADE,
+      </if>
+      <if test="realname != null" >
+        REALNAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="registertime != null" >
+        REGISTERTIME,
+      </if>
+      <if test="emil != null" >
+        EMIL,
+      </if>
+      <if test="headimg != null" >
+        HEADIMG,
+      </if>
+      <if test="loginName !=null">
+        LOGINNAME,
+      </if>
+      <if test="image !=null">
+        IMAGE,
+      </if>
+      <if test="userSalt !=null">
+        USERSALT,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DECIMAL},
+      </if>
+      <if test="realname != null" >
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=DECIMAL},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=DECIMAL},
+      </if>
+      <if test="registertime != null" >
+        #{registertime},
+      </if>
+      <if test="emil != null" >
+        #{emil,jdbcType=VARCHAR},
+      </if>
+      <if test="headimg != null" >
+        #{headimg,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName !=null">
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="image !=null">
+        #{image,jdbcType=BLOB},
+      </if>
+      <if test="userSalt !=null">
+        #{userSalt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjk.fighting.model.Users" >
+    update USERS
+    <set >
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        GRADE = #{grade,jdbcType=DECIMAL},
+      </if>
+      <if test="realname != null" >
+        REALNAME = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=DECIMAL},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=DECIMAL},
+      </if>
+      <if test="registertime != null" >
+        REGISTERTIME = #{registertime,jdbcType=DATE},
+      </if>
+      <if test="emil != null" >
+        EMIL = #{emil,jdbcType=VARCHAR},
+      </if>
+      <if test="headimg != null" >
+        HEADIMG = #{headimg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USERID = #{userid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjk.fighting.model.Users" >
+    update USERS
+    set USERNAME = #{username,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      GRADE = #{grade,jdbcType=DECIMAL},
+      REALNAME = #{realname,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=DECIMAL},
+      SEX = #{sex,jdbcType=DECIMAL},
+      REGISTERTIME = #{registertime,jdbcType=DATE},
+      EMIL = #{emil,jdbcType=VARCHAR},
+      HEADIMG = #{headimg,jdbcType=VARCHAR}
+    where USERID = #{userid,jdbcType=DECIMAL}
+  </update>
+</mapper>

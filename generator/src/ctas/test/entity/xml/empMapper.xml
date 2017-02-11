@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ctas.test.mapper.empMapper" >
+  <resultMap id="BaseResultMap" type="ctas.test.entity.emp" >
+    <id column="EMPNO" property="empno" jdbcType="DECIMAL" />
+    <result column="ENAME" property="ename" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+    <result column="MGR" property="mgr" jdbcType="DECIMAL" />
+    <result column="HIREDATE" property="hiredate" jdbcType="DATE" />
+    <result column="SAL" property="sal" jdbcType="DECIMAL" />
+    <result column="COMM" property="comm" jdbcType="DECIMAL" />
+    <result column="DEPTNO" property="deptno" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from EMP
+    where EMPNO = #{empno,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from EMP
+    where EMPNO = #{empno,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="ctas.test.entity.emp" >
+    insert into EMP (EMPNO, ENAME, JOB, 
+      MGR, HIREDATE, SAL, COMM, 
+      DEPTNO)
+    values (#{empno,jdbcType=DECIMAL}, #{ename,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, 
+      #{mgr,jdbcType=DECIMAL}, #{hiredate,jdbcType=DATE}, #{sal,jdbcType=DECIMAL}, #{comm,jdbcType=DECIMAL}, 
+      #{deptno,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="ctas.test.entity.emp" >
+    insert into EMP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="empno != null" >
+        EMPNO,
+      </if>
+      <if test="ename != null" >
+        ENAME,
+      </if>
+      <if test="job != null" >
+        JOB,
+      </if>
+      <if test="mgr != null" >
+        MGR,
+      </if>
+      <if test="hiredate != null" >
+        HIREDATE,
+      </if>
+      <if test="sal != null" >
+        SAL,
+      </if>
+      <if test="comm != null" >
+        COMM,
+      </if>
+      <if test="deptno != null" >
+        DEPTNO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="empno != null" >
+        #{empno,jdbcType=DECIMAL},
+      </if>
+      <if test="ename != null" >
+        #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="mgr != null" >
+        #{mgr,jdbcType=DECIMAL},
+      </if>
+      <if test="hiredate != null" >
+        #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="sal != null" >
+        #{sal,jdbcType=DECIMAL},
+      </if>
+      <if test="comm != null" >
+        #{comm,jdbcType=DECIMAL},
+      </if>
+      <if test="deptno != null" >
+        #{deptno,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ctas.test.entity.emp" >
+    update EMP
+    <set >
+      <if test="ename != null" >
+        ENAME = #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        JOB = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="mgr != null" >
+        MGR = #{mgr,jdbcType=DECIMAL},
+      </if>
+      <if test="hiredate != null" >
+        HIREDATE = #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="sal != null" >
+        SAL = #{sal,jdbcType=DECIMAL},
+      </if>
+      <if test="comm != null" >
+        COMM = #{comm,jdbcType=DECIMAL},
+      </if>
+      <if test="deptno != null" >
+        DEPTNO = #{deptno,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where EMPNO = #{empno,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ctas.test.entity.emp" >
+    update EMP
+    set ENAME = #{ename,jdbcType=VARCHAR},
+      JOB = #{job,jdbcType=VARCHAR},
+      MGR = #{mgr,jdbcType=DECIMAL},
+      HIREDATE = #{hiredate,jdbcType=DATE},
+      SAL = #{sal,jdbcType=DECIMAL},
+      COMM = #{comm,jdbcType=DECIMAL},
+      DEPTNO = #{deptno,jdbcType=DECIMAL}
+    where EMPNO = #{empno,jdbcType=DECIMAL}
+  </update>
+</mapper>

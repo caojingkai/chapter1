@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjk.fighting.dao.SalgradeMapper" >
+  <resultMap id="BaseResultMap" type="com.cjk.fighting.model.Salgrade" >
+    <result column="GRADE" property="grade" jdbcType="DECIMAL" />
+    <result column="LOSAL" property="losal" jdbcType="DECIMAL" />
+    <result column="HISAL" property="hisal" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cjk.fighting.model.Salgrade" >
+    insert into SALGRADE (GRADE, LOSAL, HISAL
+      )
+    values (#{grade,jdbcType=DECIMAL}, #{losal,jdbcType=DECIMAL}, #{hisal,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjk.fighting.model.Salgrade" >
+    insert into SALGRADE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="grade != null" >
+        GRADE,
+      </if>
+      <if test="losal != null" >
+        LOSAL,
+      </if>
+      <if test="hisal != null" >
+        HISAL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="grade != null" >
+        #{grade,jdbcType=DECIMAL},
+      </if>
+      <if test="losal != null" >
+        #{losal,jdbcType=DECIMAL},
+      </if>
+      <if test="hisal != null" >
+        #{hisal,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

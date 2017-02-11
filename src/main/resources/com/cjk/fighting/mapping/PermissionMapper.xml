@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjk.fighting.dao.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.cjk.fighting.model.Permission" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PERMISSION_NAME" property="permissionName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PERMISSION_NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from PERMISSION
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectPermissionByRoleID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT PE.ID,PE.PERMISSION_NAME 
+     FROM PERMISSION PE , ROLE_PERMISSION RP 
+     WHERE PE.ID = RP.PERMISSION_ID 
+     AND RP.ROLE_ID =#{id,jdbcType=DECIMAL}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from PERMISSION
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cjk.fighting.model.Permission" >
+    insert into PERMISSION (ID, PERMISSION_NAME)
+    values (#{id,jdbcType=DECIMAL}, #{permissionName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjk.fighting.model.Permission" >
+    insert into PERMISSION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="permissionName != null" >
+        PERMISSION_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="permissionName != null" >
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjk.fighting.model.Permission" >
+    update PERMISSION
+    <set >
+      <if test="permissionName != null" >
+        PERMISSION_NAME = #{permissionName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjk.fighting.model.Permission" >
+    update PERMISSION
+    set PERMISSION_NAME = #{permissionName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,17 @@
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+ 
+    <definition name="template" template="/WEB-INF/views/main_tiles.jsp">
+        <put-attribute name="top" value="/WEB-INF/views/top.jsp" />
+        <put-attribute name="foot" value="/WEB-INF/views/foot.jsp" />
+    </definition>
+    
+    <definition name ="showDept3" extends = "template">
+       <put-attribute name="content" value = "/WEB-INF/jsp/showDept.jsp"></put-attribute>
+    </definition>
+ 
+</tiles-definitions>
+
